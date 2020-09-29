@@ -40,9 +40,9 @@ app.post('/removetask', function(req,res){
     var completedTask = req.body.done;
     if(typeof removeTask === 'string'){
         tasks.splice(tasks.indexOf(removeTask),1);
-        completedTask = tasks.indexOf(removeTask),1;
-        completed.push(completedTask);
-        console.log(completedTask);
+        //completedTask = tasks.indexOf(removeTask),1;
+        //completed.push(completedTask);
+        //console.log(completedTask);
     }else if(typeof removeTask === 'object'){
         for(var i = 0; i< removeTask.length; i++){
             tasks.splice(tasks.indexOf(removeTask[i]),1);
