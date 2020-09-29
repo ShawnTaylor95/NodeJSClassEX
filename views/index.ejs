@@ -11,15 +11,18 @@
         <input type="text" name="newtask" placeholder="add new task">
         <button> Add a Task </button>
         <h2> Tasks </h2>
-        <% for( var i=0; i < tasks.length; i++){ %>
+            <% for( var i=0; i < tasks.length; i++){ %>
                 <li><input type="checkbox" name="check" value="<%= tasks[i] %>"  /><%= tasks[i] %></li>
 
             <% } %>
-        
-
         <button formaction="/removetask" type="submit"> Remove Task </button>
         </form>
         <h2> Completed tasks </h2>
+         <% for( var j=0; j < completed.length; j++){ %>
+                <li><name="done" value="<%= completed[j] %>"  /><%= completed[j] %></li>
+
+            <% } %>
+
     </div>
     </body>
 </html>
