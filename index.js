@@ -7,7 +7,7 @@ var bodyParser= require('body-parser');
 var app = express();
 
 //get port information
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 
 //tell application to use ejs for templates
 app.set('view engine', 'ejs');
