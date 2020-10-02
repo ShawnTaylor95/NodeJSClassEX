@@ -6,6 +6,9 @@ var bodyParser= require('body-parser');
 //create express object, call express
 var app = express();
 
+//get port information
+const port = process.env.port || 3000;
+
 //tell application to use ejs for templates
 app.set('view engine', 'ejs');
 // tell app to use body-parser
@@ -37,7 +40,7 @@ app.post('/addtask', function(req,res){
 app.post('/removetask', function(req,res){
     //push to completed
     var removeTask = req.body.check;
-    var completedTask = req.body.done;
+    //var completedTask = req.body.done;
     if(typeof removeTask === 'string'){
         tasks.splice(tasks.indexOf(removeTask),1);
         //completedTask = tasks.indexOf(removeTask),1;
@@ -52,6 +55,6 @@ app.post('/removetask', function(req,res){
 });
 
 //server setup
-app.listen(3000,function(){
-    console.log('Listening!')
+app.listen(port,function(){
+    console.log('Listening on ' + port)
 });
