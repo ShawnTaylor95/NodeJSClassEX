@@ -18,11 +18,11 @@
         <button formaction="/removetask" type="submit"> Remove Task </button>
         </form>
         <h2> Completed tasks </h2>
-         <% for( var j=0; j < completed.length; j++){ %>
-                <li><name="done" value="<%= completed[j] %>"  /><%= completed[j] %></li>
+         <% for( var i=0; i < completed.length; i++){ %>
+                <li><input type="checkbox" name="completedDelete" value="<%= completed[i] %>"  /><%= completed[i] %></li>
 
             <% } %>
-
+            <button formaction="/deleteCompleted" type="submit"> Remove </button>
     </div>
     </body>
 </html>

@@ -2,6 +2,8 @@
 var express = require('express');
 //require body-parser
 var bodyParser= require('body-parser');
+//require mongoose
+var mongoose = require("mongoose");
 
 //create express object, call express
 var app = express();
@@ -16,15 +18,39 @@ app.use(express.static("public"));
 // tell app to use body-parser
 app.use(bodyParser.urlencoded({extended: true}));
 
-//couple of items
-var tasks = ["make it to class", "take child to daycare"];
+// connection information for Mongo
+const Todo = require('./models/todo.model');
+const mongoDB =  'mongodb+srv://testConnection:b8RwqJYgo4hD1xhe@nodetodoexample-iqnde.mongodb.net/test?retryWrites=true&w=majority'
+mongoose.connect(mongoDB);
+mongoose.Promise = global.Promise;
+let db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+
+//couple of items
+var tasks = [];
 //completed items
-var completed = ["extra work"];
+var completed = [];
 
 
 // get homepage
 app.get('/', function(req,res){
+    //query to mongoDB for todos
+    Todo.find(function(err, todo){
+        if(err){
+            console.log(err);
+        }else{
+            for(i = 0; i< todo.length; i++){
+                if(todo[i].done){
+                    completed.push(todo[i].item)
+                }else{
+                    tasks.push(todo[i].item)
+                }
+            }
+        }
+    });
+
+
 //return something to homepage
     res.render('index', {tasks: tasks, completed: completed}); //add completed variable to ejs ex {a:a,b:b}
 });
