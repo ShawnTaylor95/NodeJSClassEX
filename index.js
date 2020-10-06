@@ -68,15 +68,20 @@ app.post('/addtask', function(req,res){
 app.post('/removetask', function(req,res){
     //push to completed
     var removeTask = req.body.check;
-    //var completedTask = req.body.done;
+    
+    //tasks.splice(tasks.indexOf(removeTask),1); goes below if statment
     if(typeof removeTask === 'string'){
-        tasks.splice(tasks.indexOf(removeTask),1);
+            tasks.splice(tasks.indexOf(removeTask),1);
+            completed.push(removeTask);
+
+        
         //completedTask = tasks.indexOf(removeTask),1;
         //completed.push(completedTask);
         //console.log(completedTask);
     }else if(typeof removeTask === 'object'){
         for(var i = 0; i< removeTask.length; i++){
             tasks.splice(tasks.indexOf(removeTask[i]),1);
+            completed.push(removeTask[i]);
         }
     }
     res.redirect('/');
