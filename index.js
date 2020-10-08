@@ -33,20 +33,19 @@ var completed = [];
 
 
 // get homepage
-app.get('/', function(req,res){
-    
+app.get('/', function(req, res){
     //query to mongoDB for todos
     Todo.find(function(err, todo){
         if(err){
             console.log(err);
         }else{
-                tasks = [];
-                completed = [];
+            tasks = [];
+            completed = [];
             for(i = 0; i< todo.length; i++){
                 if(todo[i].done){
                     completed.push(todo[i].item)
                 }else{
-                    tasks.push(todo[i].item)
+                    tasks.push(todo[i])
                 }
             }
         }
@@ -58,44 +57,47 @@ app.get('/', function(req,res){
 });
 
 //add post / addtask
-app.post('/addtask', function(req,res){
-    let newToDo = new Todo({
+app.post('/addtask', function(req, res){
+    let newTodo = new Todo({
         item: req.body.newtask,
         done: false
     })
-    
-    newToDo.save(function(err,todo){
+    newTodo.save(function(err, todo){
         if (err){
-            console.log(err);
-        }
-        else {
-            res.redirect('/'); //redirects to homepage : return to index
+            console.log(err)
+        } else {
+            //return index
+            res.redirect('/');
         }
     });
 });
 
 //remove tasks
-app.post('/removetask', function(req,res){
-    //push to completed
-    var removeTask = req.body.check;
-    
-    //tasks.splice(tasks.indexOf(removeTask),1); goes below if statment
-    if(typeof removeTask === 'string'){
-            tasks.splice(tasks.indexOf(removeTask),1);
-            completed.push(removeTask);
-
-        
-        //completedTask = tasks.indexOf(removeTask),1;
-        //completed.push(completedTask);
-        //console.log(completedTask);
-    }else if(typeof removeTask === 'object'){
-        for(var i = 0; i< removeTask.length; i++){
-            tasks.splice(tasks.indexOf(removeTask[i]),1);
-            completed.push(removeTask[i]);
+app.post('/removetask', function(req, res){
+    var id = req.body.check;
+    if(typeof id === 'string'){
+        Todo.updateOne({_id: id},{done:true},function(err){
+            if(err){
+                console.log(err)
+            }
+        })
+    }else if(typeof id === 'object'){
+        for (var i = 0; i < id.length; i++){
+            Todo.updateOne({_id: id[i]},{done:true},function(err){
+                if(err){
+                    console.log(err)
+                }
+            })
         }
     }
     res.redirect('/');
 });
+
+app.post('/deleteTask', function(){
+    // write the function for delete using ID
+    // handle for single and multiple delete requests (req.body.delete)
+    // Todo.deleteOne(id, function(err){})
+})
 
 //server setup
 app.listen(port,function(){
