@@ -26,7 +26,6 @@ mongoose.Promise = global.Promise;
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-
 //couple of items
 var tasks = [];
 //completed items
@@ -35,11 +34,14 @@ var completed = [];
 
 // get homepage
 app.get('/', function(req,res){
+    
     //query to mongoDB for todos
     Todo.find(function(err, todo){
         if(err){
             console.log(err);
         }else{
+                tasks = [];
+                completed = [];
             for(i = 0; i< todo.length; i++){
                 if(todo[i].done){
                     completed.push(todo[i].item)
@@ -57,11 +59,19 @@ app.get('/', function(req,res){
 
 //add post / addtask
 app.post('/addtask', function(req,res){
-    //create new variable
-    var newTask = req.body.newtask;
-    tasks.push(newTask);
-    //redirects code to app.get so the code won't be redundant.. still pushes new task code to list on homepage
-    res.redirect('/');
+    let newToDo = new Todo({
+        item: req.body.newtask,
+        done: false
+    })
+    
+    newToDo.save(function(err,todo){
+        if (err){
+            console.log(err);
+        }
+        else {
+            res.redirect('/'); //redirects to homepage : return to index
+        }
+    });
 });
 
 //remove tasks
