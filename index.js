@@ -4,6 +4,8 @@ var express = require('express');
 var bodyParser= require('body-parser');
 //require mongoose
 var mongoose = require("mongoose");
+//require node fetch
+var fetch = require('node-fetch');
 
 //create express object, call express
 var app = express();
@@ -113,7 +115,31 @@ app.post('/deleteCompleted', function(req, res){
         }
     }
     res.redirect('/');
-})
+});
+
+//fetch nasa information and send to front end as JSON data
+app.get('/nasa', function(req,res){
+    let nasaData;
+    fetch('https://api.nasa.gov/planetary/apod?api_key=QLzCHpxOPVNRfdy6dO8zpelNyIYRQkE6OCVZcVLr')
+    .then(res => res.json())
+    .then(data => {
+        nasaData = data;
+        res.json(nasaData);
+    });
+});
+
+//get our data for the todo list from mongo and send to front end as JSON
+app.get('/todoListJson', function(req, res){
+    //query to mongoDB for todos
+    Todo.find(function(err, todo){
+        if(err){
+            console.log(err);
+        }else{
+           res.json(todo);
+        }
+    });
+
+});
 
 //server setup
 app.listen(port,function(){
