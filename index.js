@@ -43,7 +43,7 @@ app.get('/', function(req, res){
             completed = [];
             for(i = 0; i< todo.length; i++){
                 if(todo[i].done){
-                    completed.push(todo[i].item)
+                    completed.push(todo[i])
                 }else{
                     tasks.push(todo[i])
                 }
@@ -80,6 +80,7 @@ app.post('/removetask', function(req, res){
             if(err){
                 console.log(err)
             }
+            res.redirect('/');
         })
     }else if(typeof id === 'object'){
         for (var i = 0; i < id.length; i++){
@@ -87,16 +88,31 @@ app.post('/removetask', function(req, res){
                 if(err){
                     console.log(err)
                 }
+                res.redirect('/');
             })
         }
     }
-    res.redirect('/');
+    
 });
 
-app.post('/deleteTask', function(){
-    // write the function for delete using ID
-    // handle for single and multiple delete requests (req.body.delete)
-    // Todo.deleteOne(id, function(err){})
+app.post('/deleteCompleted', function(req, res){
+    var id = req.body.delete;
+    if(typeof id === 'string'){
+        Todo.deleteOne({_id: id},function(err){
+            if(err){
+                console.log(err);
+            }
+        });
+    }else if (typeof id === "object"){
+        for(var i = 0; i < id.length; i++){
+            Todo.deleteOne({_id: id[i]}, function(err){
+            if (err){
+                console.log(err)
+            }
+        });
+        }
+    }
+    res.redirect('/');
 })
 
 //server setup
